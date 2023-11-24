@@ -1,19 +1,37 @@
 package ru.hse.homework1;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        System.out.println("If you want to convert centimeters to inches enter 1");
+        System.out.println("If you want to convert inches to centimeters enter 2");
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        int flag = scanner.nextInt();
+
+        if (flag == 1) {
+            System.out.println("Enter centimeters:");
+            if (scanner.hasNextDouble()) {
+                double value = scanner.nextDouble();
+                value /= 2.54d;
+                System.out.println("In inches: " + value);
+            } else {
+                System.out.println("Number is incorrect");
+            }
+        } else if (flag == 2) {
+            System.out.println("Enter inches:");
+            if (scanner.hasNextDouble()) {
+                double value = scanner.nextDouble();
+                value *= 2.54d;
+                System.out.println("In centimeters: " + value);
+            } else {
+                System.out.println("Number is incorrect");
+            }
+        } else {
+            System.out.println("Number is incorrect");
         }
+
     }
 }
