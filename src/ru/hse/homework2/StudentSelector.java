@@ -20,6 +20,10 @@ public class StudentSelector {
     }
 
     StudentSelector(Student[] people) {
+        if (people == null) {
+            System.out.println("Некоректный массив");
+            throw new NullPointerException();
+        }
         students = people;
     }
 }
