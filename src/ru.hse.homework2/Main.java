@@ -1,11 +1,10 @@
 package ru.hse.homework2;
 
-import java.io.Console;
 import java.util.Scanner;
 
 public class Main {
 
-    static StudentSelector createNewStudentSelector() {
+    private static StudentSelector createNewStudentSelector() {
         Student[] group = new Student[]{
                 new Student("Герман", "Альберштейн"),
                 new Student("Георгий", "Беликов"),
@@ -26,47 +25,57 @@ public class Main {
         return new StudentSelector(group);
     }
 
-    static void about() {
+    private static void about() {
         System.out.println("Автор: Яковлев Иван");
     }
 
-    static void unknownCommand() {
+    private static void unknownCommand() {
         System.out.println("Неизвестная команда");
     }
 
-    static void exit() {
+    private static void exit() {
         System.out.println("Завершение программы");
     }
 
-    static void nextStudent(StudentSelector selector) {
+    private static void nextStudent(StudentSelector selector) {
         Student student = selector.nextRandomStudent();
-        System.out.println("К доске идет " + student.getFirstName() + " " + student.getLastName());
+        if (student != null) {
+            System.out.println("К доске идет " + student.getFirstName() + " " + student.getLastName());
+        } else {
+            System.out.println("В классе нет людей");
+        }
+
     }
 
     public static void main(String[] args) {
         StudentSelector students = createNewStudentSelector();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("В группе " + students.count() + " студентов.\n");
+        System.out.println("В группе " + students.count() + " студентов.");
 
         while (true) {
-            System.out.println("Введите:\n" +
-                    "* next, чтобы узнать, кто пойдёт к доске\n" +
-                    "* about, чтобы узнать автора программы\n" +
-                    "* exit, чтобы выйти\n" +
-                    "Ваш выбор?");
+            System.out.println("""
+                    Введите:
+                    * next, чтобы узнать, кто пойдёт к доске
+                    * about, чтобы узнать автора программы
+                    * exit, чтобы выйти
+                    Ваш выбор?""");
 
-            String command = scanner.nextLine();
-            if (command.equals("next")) {
-                nextStudent(students);
-            } else if (command.equals("about")) {
-                about();
-            } else if (command.equals("exit")) {
-                exit();
-                break;
-            } else {
-                unknownCommand();
+            if (scanner.hasNext()) {
+                String command;
+                command = scanner.nextLine();
+                if (command.equals("next")) {
+                    nextStudent(students);
+                } else if (command.equals("about")) {
+                    about();
+                } else if (command.equals("exit")) {
+                    exit();
+                    break;
+                } else {
+                    unknownCommand();
+                }
             }
+
         }
 
     }

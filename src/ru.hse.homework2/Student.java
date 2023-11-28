@@ -1,5 +1,7 @@
 package ru.hse.homework2;
 
+import java.util.Objects;
+
 public class Student {
     private final String firstName;
     private final String lastName;
@@ -12,9 +14,9 @@ public class Student {
         return lastName;
     }
 
-    Student(String name, String surname) {
-        firstName = name;
-        lastName = surname;
+    public Student(String firstName, String lastName) {
+        this.firstName = Objects.requireNonNull(firstName, "string must not be null");
+        this.lastName = Objects.requireNonNull(lastName, "string must not be null");
     }
 
 }
