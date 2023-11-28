@@ -63,7 +63,7 @@ public class Main {
 
             if (scanner.hasNext()) {
                 String command;
-                command = scanner.nextLine();
+                command = scanner.next();
                 if (command.equals("next")) {
                     nextStudent(students);
                 } else if (command.equals("about")) {
@@ -74,6 +74,9 @@ public class Main {
                 } else {
                     unknownCommand();
                 }
+            }
+            else {
+                break;
             }
 
         }
