@@ -1,0 +1,18 @@
+= Scheduled framework
+
+Учебный проект -- демо фреймворка, который запускает `@Scheduled` методы по расписанию, подобно поддержке https://spring.io/guides/gs/scheduling-tasks[`@Scheduled` в Spring Framework]
+
+== Модули проекта
+
+Проект разделён на 3 модуля:
+
+. `api` -- содержит интерфейс link:api/src/main/java/ru/hse/scheduled/api/Framework.java[`Framework.java`] и аннотацию link:api/src/main/java/ru/hse/scheduled/api/annotation/Scheduled.java[`@Scheduled`]
+. `impl` -- содержит реализацию фреймворка
+. `clinet` -- клиент фреймворка, содержит демо приложение
+
+Каждый модуль -- одновременно и модуль https://maven.apache.org/guides/mini/guide-multiple-modules.html[maven'а], и https://www.oracle.com/corporate/features/understanding-java-9-modules.html[java-модуль]
+
+== Полезные ссылки
+
+. https://www.youtube.com/watch?v=MGX-JfMl9-Y[Modules in One Lesson]
+. https://github.com/sormuras/awesome-java-module-system[A curated list of resources related to the Java Module System]
