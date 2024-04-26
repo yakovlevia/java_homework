@@ -1,10 +1,7 @@
-import ru.hse.scheduled.api.Framework;
+import ru.hse.server.Server;
 
-module ru.hse.scheduled.client {
-    requires ru.hse.scheduled.api;
+module ru.hse.client {
+    requires ru.hse.server;
 
-    opens ru.hse.scheduled.client to ru.hse.scheduled.impl, ru.hse.scheduled.impl_s;
-    //opens ru.hse.scheduled.client to ru.hse.scheduled.impl_s;
-
-    uses Framework;
+    uses Server;
 }
