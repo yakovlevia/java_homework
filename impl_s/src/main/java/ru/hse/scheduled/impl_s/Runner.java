@@ -3,13 +3,13 @@ package ru.hse.scheduled.impl_s;
 
 import java.util.concurrent.ScheduledFuture;
 
-public class Executor implements Runnable {
+public class Runner implements Runnable {
     private final long times;
-    long cur_times = 0;
+    private long curTimes = 0;
     private final Runnable func;
     private ScheduledFuture<?> sch;
 
-    public Executor(long times, Runnable func) {
+    public Runner(long times, Runnable func) {
         this.times = times;
         this.func = func;
     }
@@ -18,10 +18,10 @@ public class Executor implements Runnable {
     public void run() {
         synchronized (func) {
             func.run();
-            cur_times++;
+            curTimes++;
 
-            System.out.println(cur_times);
-            if (cur_times < times) return;
+            System.out.println(curTimes);
+            if (curTimes < times) return;
 
             sch.cancel(true);
         }

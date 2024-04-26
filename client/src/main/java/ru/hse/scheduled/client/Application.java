@@ -16,7 +16,7 @@ public class Application {
      * Demo {@link Scheduled} method.
      * Runs each 1s
      */
-    @Scheduled(times = 10)
+    @Scheduled(times = 7)
     private void sayHello() {
         System.out.println("Hello! Time is " + LocalDateTime.now());
     }
@@ -56,11 +56,18 @@ public class Application {
     private static Framework getFramework() {
         //System.out.println(ServiceLoader.load(Framework.class));
 
-        return ServiceLoader.load(Framework.class)
-                .stream()
-                //.filter(f -> f.get().supports(Feature.TIMES))
-                .map(ServiceLoader.Provider::get)
-                .findAny()
-                .orElseThrow();
+        Framework fr = null;
+
+        for (var t : ServiceLoader.load(Framework.class)) {
+            if (fr == null) {
+                fr = t;
+            }
+            else if (!fr.supports(Feature.TIMES) && t.supports(Feature.TIMES)) {
+                fr = t;
+                break;
+            }
+        }
+
+        return fr;
     }
 }

@@ -28,11 +28,16 @@ public class New_Framework implements Framework {
             if (annotation != null) {
                 Object object = newInstance(clazz);
                 long times = annotation.times();
-                Executor exec = new Executor(times, () -> invokeMethod(method, object));
-                var smt = executorService.scheduleAtFixedRate(
-                        exec, 0, 1000, TimeUnit.MILLISECONDS);
 
+                for (int i = 0; i < times; i++) {
+                    executorService.schedule(
+                            new PrintExceptionRunnable(() -> invokeMethod(method, object)), 1000 * i, TimeUnit.MILLISECONDS);
+                }
+                /*Runner exec = new Runner(times, () -> invokeMethod(method, object));
+                var smt = executorService.scheduleAtFixedRate(exec, 0, 1000, TimeUnit.MILLISECONDS);
                 exec.add(smt);
+                */
+
             }
         }
     }
