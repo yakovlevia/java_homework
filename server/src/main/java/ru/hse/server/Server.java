@@ -7,20 +7,6 @@ import java.util.List;
 
 public class Server {
 
-    public static long copy (Reader input, Writer output) throws IOException {
-
-        char[] buffer = new char[8192];
-        long count = 0;
-        int n;
-        while ((n = input.read( buffer )) != -1) {
-            output.write( buffer, 0, n );
-            count += n;
-        }
-        return count;
-    }
-
-
-
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket serverSocket = new ServerSocket(9999)) {
@@ -33,9 +19,9 @@ public class Server {
                      DataInputStream reader = new DataInputStream(socket.getInputStream());
                      DataOutputStream writer = new DataOutputStream(socket.getOutputStream())) {
 
-                    List<String> files = List.of(new String[]{"1.txt", "2.txt", "3.txt"});
+                    List<String> files = List.of(new String[]{"1.txt", "2.txt", "3.txt", "pict.png"});
 
-                    writer.writeUTF("Допустимые файлы для скачивания, количесво файлов - 3");
+                    writer.writeUTF("Допустимые файлы для скачивания, количесво файлов - 4");
 
                     for (var q : files) {
                         writer.writeUTF(q);
@@ -43,6 +29,11 @@ public class Server {
 
                     String line;
                     line = reader.readUTF();
+
+                    if (line.equals("exit")) {
+                        continue;
+                    }
+
                     System.out.println("Передается файл " + line);
 
 
