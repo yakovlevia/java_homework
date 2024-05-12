@@ -19,12 +19,16 @@ public class Server {
         return count;
     }
 
+
+
     public static void main(String[] args) throws IOException {
 
         try (ServerSocket serverSocket = new ServerSocket(9999)) {
             System.out.println("Сервер запущен, порт 9999.");
 
             while (true) {
+
+
                 try (Socket socket = serverSocket.accept();
                      DataInputStream reader = new DataInputStream(socket.getInputStream());
                      DataOutputStream writer = new DataOutputStream(socket.getOutputStream())) {
