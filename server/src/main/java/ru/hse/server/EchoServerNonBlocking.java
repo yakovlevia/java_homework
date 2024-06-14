@@ -20,8 +20,9 @@ public class EchoServerNonBlocking {
                 serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 
                 ByteBuffer result = ByteBuffer.allocate(4);
-                int val = 0;
-                int flag = 0;
+                ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+                int size = 0;
+
                 while (true) {
                     int select = selector.select();
                     Set<SelectionKey> keys = selector.selectedKeys();
@@ -38,35 +39,28 @@ public class EchoServerNonBlocking {
                             }
 
                             if (key.isReadable()) {
-                                ByteBuffer byteBuffer = ByteBuffer.allocate(8);
+
                                 var channel = (SocketChannel) key.channel();
 
                                 int read = channel.read(byteBuffer);
+                                //System.out.println(read);
                                 if (read == -1) {
-                                    //System.out.println("A");
+                                    System.out.println('A');
                                     key.cancel();
                                     channel.close();
                                 }
-                                else if (read == 4) {
-                                    //System.out.println("B");
-                                    int a = byteBuffer.getInt(0);
-                                    if (flag == 0) {
-                                        val = a;
-                                        flag = 1;
-                                    }
-                                    else {
-                                        result.asIntBuffer().put(a + val);
+                                else  {
+                                    size += read;
+                                    System.out.println("B" + size);
+                                    if (size >= 8) {
+                                        size -= 8;
+                                        int a = byteBuffer.getInt(0);
+                                        int b = byteBuffer.getInt(4);
+                                        System.out.println("C: " + a + '+' + b);
+                                        result.asIntBuffer().put(a + b);
                                         key.interestOps(SelectionKey.OP_WRITE);
                                         byteBuffer.flip();
-                                        flag = 0;
                                     }
-                                } else {
-                                    //System.out.println("C");
-                                    int a = byteBuffer.getInt(0);
-                                    int b = byteBuffer.getInt(4);
-                                    result.asIntBuffer().put(a + b);
-                                    key.interestOps(SelectionKey.OP_WRITE);
-                                    byteBuffer.flip();
                                 }
                             }
                             else if (key.isWritable()) {
