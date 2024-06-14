@@ -6,9 +6,8 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Vector;
 
 public class Application {
 
@@ -21,9 +20,13 @@ public class Application {
         if (args.length >= 3) {
             dir = args[2];
             host = args[0];
-            port = Integer.parseInt(args[1]);
+            try {
+                port = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                System.out.println("Bad port");
+                return;
+            }
         }
-
 
         while (true) {
             try (Socket socket = new Socket(host, port);
@@ -33,19 +36,9 @@ public class Application {
 
                 String str = reader.readUTF();
                 System.out.println(str + ':');
+                int cnt = reader.readInt();
 
-                int cnt = -1;
-                for (int i = 0; i < str.length(); i++) {
-                    if (cnt == -1 && str.charAt(i) == '-') {
-                        cnt = 0;
-                        i++;
-                    } else if (cnt != -1) {
-                        cnt *= 10;
-                        cnt += Character.getNumericValue(str.charAt(i));
-                    }
-                }
-
-                List<String> files = new Vector<String>();
+                ArrayList<String> files = new ArrayList<>();
 
                 for (int i = 0; i < cnt; i++) {
                     String fileName = reader.readUTF();
@@ -70,8 +63,7 @@ public class Application {
                         } else {
                             break;
                         }
-                    }
-                    else if (myInput.hasNext()) {
+                    } else if (myInput.hasNext()) {
                         String tmp = myInput.nextLine();
                         if (tmp.equals("exit")) {
                             flag = 1;
@@ -79,36 +71,36 @@ public class Application {
                         }
                     }
                 }
-
-                if (flag == 0) {
-                    writer.writeUTF(files.get(num - 1));
-
-                    Path dirPath = Paths.get(dir);
-
-                    try {
-                        Files.createDirectories(dirPath);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    try (FileOutputStream fos = new FileOutputStream(dir + files.get(num - 1))) {
-                        byte[] array = reader.readAllBytes();
-                        fos.write(array, 0, array.length);
-                        System.out.println("The file has been written");
-                    } catch (IOException ex) {
-                        System.out.println(ex.getMessage());
-                    }
-
-                }
-                else {
-                    writer.writeUTF("exit");
-                    socket.close();
+                if (flag == 1) {
                     break;
                 }
 
-            }
 
+                writer.writeUTF(files.get(num - 1));
+
+                Path dirPath = Paths.get(dir);
+
+                try {
+                    Files.createDirectories(dirPath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try (FileOutputStream fileOutputStream = new FileOutputStream(dir + files.get(num - 1))) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = reader.read(buffer)) != -1) {
+                        fileOutputStream.write(buffer, 0, bytesRead);
+                    }
+                    System.out.println("Файл записан");
+                } catch (Exception e) {
+                    System.out.println("Ошибка записи");
+                    e.printStackTrace();
+                }
+
+            }
         }
+
     }
 
 }
